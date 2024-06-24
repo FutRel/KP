@@ -15,6 +15,6 @@ public class MainStage {
 
     public static void stageWorking(Stage stage) {
         System.out.println(123);
-        //
+
     }
 }
