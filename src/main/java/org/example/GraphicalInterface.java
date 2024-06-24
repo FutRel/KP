@@ -15,7 +15,7 @@ import java.sql.*;
 public class GraphicalInterface extends Application {
     private final UserAccessManager accessManager = new UserAccessManager();
 
-    String role = "";
+    static String role = "";
     private static final String DB_URL = "jdbc:mysql://localhost:3306/kp";
     private static final String USER = "root";
     private static final String PASS = "SQL1234";
@@ -26,11 +26,8 @@ public class GraphicalInterface extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
         Stage stage = new Stage();
-        stage.setTitle("Restaurant");
-        stage.setFullScreen(true);
-        stage.show();
+        MainStage.startStage(stage);
 
 
         //user access and registration step
@@ -64,6 +61,7 @@ public class GraphicalInterface extends Application {
             if (role != null) {
                 System.out.println("Logged in as: " + role);
                 primaryStage.close();
+                MainStage.stageWorking(stage);
             }
             else System.out.println("Login failed. Please check your credentials.");
         });
@@ -130,5 +128,9 @@ public class GraphicalInterface extends Application {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public static String getRole() {
+        return role;
     }
 }
