@@ -42,21 +42,31 @@ public class DishIngridientsDAO {
         }
     }
 
-    public void getDishIngredient(int idDish, String role) {
+    public List<String> getDishIngredient(int idDish, String role) {
+        List<String> dishIngredients = new ArrayList<>();
         String sql = "SELECT * FROM kp.dishes_ingridients WHERE id_dish = ?";
 
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, idDish);
-            stmt.executeUpdate();
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int idIngredient = rs.getInt("id_ingridient");
+                    int ingredientAmount = rs.getInt("ingridient_amount");
+                    DishIngridients di = new DishIngridients(idDish, idIngredient, ingredientAmount);
+                    dishIngredients.add(di.getIdDish() + " " + di.getIdIngredient() + " " + di.getIngredientAmount());
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return dishIngredients;
     }
 
-    public List<DishIngridients> getAllDishIngredients(String role) {
-        List<DishIngridients> dishIngredients = new ArrayList<>();
-        String sql = "SELECT * FROM kp.dishes_ingredients";
+    public List<String> getAllDishIngredients(String role) {
+        List<String> dishIngredients = new ArrayList<>();
+        String sql = "SELECT * FROM kp.dishes_ingridients";
 
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -65,7 +75,8 @@ public class DishIngridientsDAO {
                 int idDish = rs.getInt("id_dish");
                 int idIngredient = rs.getInt("id_ingridient");
                 int ingredientAmount = rs.getInt("ingridient_amount");
-                dishIngredients.add(new DishIngridients(idDish, idIngredient, ingredientAmount));
+                DishIngridients d = new DishIngridients(idDish, idIngredient, ingredientAmount);
+                dishIngredients.add(d.getIdIngredient() + " " + d.getIdIngredient() + " " + d.getIngredientAmount());
             }
         } catch (SQLException e) {
             e.printStackTrace();

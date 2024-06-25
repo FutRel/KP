@@ -31,8 +31,8 @@ public class OrdersDAO {
         }
     }
 
-    public List<Orders> getAllOrders(String role) {
-        List<Orders> orders = new ArrayList<>();
+    public List<String> getAllOrders(String role) {
+        List<String> orders = new ArrayList<>();
         if (!role.equals("Admin")) return orders;
 
         String sql = "SELECT * FROM kp.orders";
@@ -48,7 +48,10 @@ public class OrdersDAO {
                 int waiterOrder = rs.getInt("waiter_order");
                 int tableOrder = rs.getInt("table_order");
                 int clientOrder = rs.getInt("client_order");
-                orders.add(new Orders(idOrder, dateOrder, timeStartOrder, timeEndOrder, waiterOrder, tableOrder, clientOrder));
+                Orders o = new Orders(idOrder, dateOrder, timeStartOrder, timeEndOrder, waiterOrder, tableOrder, clientOrder);
+                orders.add(o.getIdOrder() + " " + o.getDateOrder().toString() + " "
+                        + o.getTimeStartOrder().getTime() + " " + o.getTimeEndOrder().getTime() + " "
+                        + o.getWaiterOrder() + " " + o.getTableOrder() + " " + o.getClientOrder());
             }
         } catch (SQLException e) {
             e.printStackTrace();

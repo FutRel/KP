@@ -47,16 +47,8 @@ public class Orders {
         return timeEndOrder;
     }
 
-    public void setTimeEndOrder(Time timeEndOrder) {
-        this.timeEndOrder = timeEndOrder;
-    }
-
     public int getWaiterOrder() {
         return waiterOrder;
-    }
-
-    public void setWaiterOrder(int waiterOrder) {
-        this.waiterOrder = waiterOrder;
     }
 
     public int getTableOrder() {

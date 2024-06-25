@@ -37,19 +37,28 @@ public class DishesDAO {
         }
     }
 
-    public void getDish(int idDish, String role) {
+    public String getDish(int idDish, String role) {
         String sql = "SELECT * FROM dishes WHERE id_dish = ?";
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, idDish);
-            stmt.executeUpdate();
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int id = rs.getInt("id_dish");
+                    String name = rs.getString("name_dish");
+                    return id + " " + name;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "";
     }
 
-    public List<Dishes> getAllDishes(String role) {
-        List<Dishes> dishes = new ArrayList<>();
+    public List<String> getAllDishes(String role) {
+        List<String> dishes = new ArrayList<>();
         String sql = "SELECT * FROM kp.dishes";
 
         try (Connection conn = DataBaseConnection.getConnection();
@@ -58,7 +67,8 @@ public class DishesDAO {
             while (rs.next()) {
                 int idDish = rs.getInt("id_dish");
                 String nameDish = rs.getString("name_dish");
-                dishes.add(new Dishes(idDish, nameDish));
+                Dishes ds = new Dishes(idDish, nameDish);
+                dishes.add(ds.getIdDish() + " " + ds.getNameDish());
             }
         } catch (SQLException e) {
             e.printStackTrace();

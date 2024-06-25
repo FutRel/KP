@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.example.Tables.UsersDAO;
 
 import java.sql.*;
 
@@ -16,6 +17,8 @@ public class GraphicalInterface extends Application {
     private final UserAccessManager accessManager = new UserAccessManager();
 
     static String role = "";
+    static String login = "";
+    static String passwordLogin = "";
 
     public static void main(String[] args){
         launch(args);
@@ -53,6 +56,8 @@ public class GraphicalInterface extends Application {
             String password = passwordInput.getText();
 
             role = accessManager.checkAccess(username, password);
+            login = username;
+            passwordLogin = password;
 
             if (role != null) {
                 System.out.println("Logged in as: " + role);
@@ -129,5 +134,13 @@ public class GraphicalInterface extends Application {
 
     public static String getRole() {
         return role;
+    }
+
+    public static String getLogin() {
+        return login;
+    }
+
+    public static String getPasswordLogin() {
+        return passwordLogin;
     }
 }

@@ -41,21 +41,21 @@ public class OrderDishesDAO {
         }
     }
 
-    public List<OrderDishes> getOrderDishes(int idOrder, String role) {
-        List<OrderDishes> orderDishes = new ArrayList<>();
+    public List<String> getOrderDishes(int idOrder, String role) {
+        List<String> orderDishes = new ArrayList<>();
         if (role.equals("User")) return orderDishes;
 
-        String sql = "SELECT * FROM kp.order_dishes WHERE id_order = ?;";
+        String sql = "SELECT * FROM kp.order_dishes WHERE id_order = "+idOrder;
 
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);){
-            stmt.setInt(1, idOrder);
-            stmt.executeUpdate();
+            stmt.executeLargeUpdate();
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int dishOrder = rs.getInt("dish_order");
                 int dishAmountOrder = rs.getInt("dish_amount_order");
-                orderDishes.add(new OrderDishes(idOrder, dishOrder, dishAmountOrder));
+                OrderDishes o = new OrderDishes(idOrder, dishOrder, dishAmountOrder);
+                orderDishes.add(o.getIdOrder() + " " + o.getDishOrder() + " " + o.getDishAmountOrder());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,8 +64,8 @@ public class OrderDishesDAO {
         return orderDishes;
     }
 
-    public List<OrderDishes> getAllOrderDishes(String role) {
-        List<OrderDishes> orderDishes = new ArrayList<>();
+    public List<String> getAllOrderDishes(String role) {
+        List<String> orderDishes = new ArrayList<>();
         if (!role.equals("Admin")) return orderDishes;
 
         String sql = "SELECT * FROM kp.order_dishes";
@@ -77,7 +77,8 @@ public class OrderDishesDAO {
                 int idOrder = rs.getInt("id_order");
                 int dishOrder = rs.getInt("dish_order");
                 int dishAmountOrder = rs.getInt("dish_amount_order");
-                orderDishes.add(new OrderDishes(idOrder, dishOrder, dishAmountOrder));
+                OrderDishes o = new OrderDishes(idOrder, dishOrder, dishAmountOrder);
+                orderDishes.add(o.getIdOrder() + " " + o.getDishOrder() + " " + o.getDishAmountOrder());
             }
         } catch (SQLException e) {
             e.printStackTrace();

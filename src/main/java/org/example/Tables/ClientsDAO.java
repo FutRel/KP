@@ -40,21 +40,26 @@ public class ClientsDAO {
         }
     }
 
-    public Clients getClient(int id, String role) {
-        Clients ret = new Clients(0, "", "");
-
+    public String getClient(int id, String role) {
+        String ret = "";
         if (role.equals("User")) return ret;
 
         String sql = "SELECT * FROM kp.clients WHERE id_client = ?";
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            stmt.executeUpdate();
-            ResultSet rs = stmt.executeQuery();
-            int idClient = rs.getInt("id_client");
-            String nameClient = rs.getString("name_client");
-            String addressClient = rs.getString("address_client");
-            ret = new Clients(idClient, nameClient, addressClient);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int idClient = rs.getInt("id_client");
+                    String nameClient = rs.getString("name_client");
+                    String addressClient = rs.getString("address_client");
+                    Clients cl = new Clients(idClient, nameClient, addressClient);
+                    ret = cl.getIdClient() + " " + cl.getNameClient() + " " + cl.getAddressClient();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,8 +68,8 @@ public class ClientsDAO {
         return ret;
     }
 
-    public List<Clients> getAllClients(String role) {
-        List<Clients> clients = new ArrayList<>();
+    public List<String> getAllClients(String role) {
+        List<String> clients = new ArrayList<>();
         if (role.equals("User")) return clients;
 
         String sql = "SELECT * FROM kp.clients";
@@ -76,7 +81,8 @@ public class ClientsDAO {
                 int idClient = rs.getInt("id_client");
                 String nameClient = rs.getString("name_client");
                 String addressClient = rs.getString("address_client");
-                clients.add(new Clients(idClient, nameClient, addressClient));
+                Clients cl = new Clients(idClient, nameClient, addressClient);
+                clients.add(cl.getIdClient() + " " + cl.getNameClient() + " " + cl.getAddressClient());
             }
         } catch (SQLException e) {
             e.printStackTrace();

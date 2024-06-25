@@ -27,18 +27,23 @@ public class WaitersDAO {
         }
     }
 
-    public void updateWaiterData(int idWaiter, String nameWaiter, String addresWaiter, String numberWaiter, String role){
+    public void updateWaiterData(int idWaiter, String nameWaiter, String addressWaiter, String numberWaiter, String role) {
         if (role.equals("User")) return;
 
-        String sql = "UPDATE kp.waiters\n" +
-                "SET name_waiter = "+nameWaiter+"\n" +
-                "SET addres_waiter = "+addresWaiter+"\n" +
-                "SET number_waiter = "+numberWaiter+"\n" +
+        String sql = "UPDATE kp.waiters " +
+                "SET name_waiter = ?, " +
+                "    addres_waiter = ?, " +
+                "    number_waiter = ? " +
                 "WHERE id_waiter = ?";
 
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idWaiter);
+
+            stmt.setString(1, nameWaiter);
+            stmt.setString(2, addressWaiter);
+            stmt.setString(3, numberWaiter);
+            stmt.setInt(4, idWaiter);
+
             stmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -60,8 +65,8 @@ public class WaitersDAO {
         }
     }
 
-    public List<Waiters> getAllWaiters(String role) {
-        List<Waiters> waiters = new ArrayList<>();
+    public List<String> getAllWaiters(String role) {
+        List<String> waiters = new ArrayList<>();
         if (role.equals("User")) return waiters;
 
         String sql = "SELECT * FROM kp.waiters";
@@ -72,9 +77,10 @@ public class WaitersDAO {
             while (rs.next()) {
                 int idWaiter = rs.getInt("id_waiter");
                 String nameWaiter = rs.getString("name_waiter");
-                String addressWaiter = rs.getString("address_waiter");
+                String addressWaiter = rs.getString("addres_waiter");
                 String numberWaiter = rs.getString("number_waiter");
-                waiters.add(new Waiters(idWaiter, nameWaiter, addressWaiter, numberWaiter));
+                Waiters w = new Waiters(idWaiter, nameWaiter, addressWaiter, numberWaiter);
+                waiters.add(w.getIdWaiter() + " " + w.getNameWaiter() + " " + w.getAddressWaiter() + " " + w.getNumberWaiter());
             }
         } catch (SQLException e) {
             e.printStackTrace();

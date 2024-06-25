@@ -27,8 +27,8 @@ public class TablesDAO {
         }
     }
 
-    public List<Tables> getAllTables(String role) {
-        List<Tables> tables = new ArrayList<>();
+    public List<String> getAllTables(String role) {
+        List<String> tables = new ArrayList<>();
         String sql = "SELECT * FROM kp.tables";
 
         try (Connection conn = DataBaseConnection.getConnection();
@@ -38,7 +38,8 @@ public class TablesDAO {
                 int idTable = rs.getInt("id_table");
                 int capacityTable = rs.getInt("capacity_table");
                 int employTable = rs.getInt("employ_table");
-                tables.add(new Tables(idTable, capacityTable, employTable));
+                Tables t = new Tables(idTable, capacityTable, employTable);
+                tables.add(t.getIdTable() + " " + t.getCapacityTable());
             }
         } catch (SQLException e) {
             e.printStackTrace();

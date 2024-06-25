@@ -41,8 +41,8 @@ public class IngridientsDAO {
         }
     }
 
-    public List<Ingridients> getAllIngredients(String role) {
-        List<Ingridients> ingredients = new ArrayList<>();
+    public List<String> getAllIngredients(String role) {
+        List<String> ingredients = new ArrayList<>();
         if (role.equals("User")) return ingredients;
 
         String sql = "SELECT * FROM kp.ingridients";
@@ -55,7 +55,9 @@ public class IngridientsDAO {
                 String ingredientName = rs.getString("name_ingridient");
                 String ingredientMeasure = rs.getString("ingridient_measure");
                 double ingredientAmount = rs.getDouble("ingridient_amount");
-                ingredients.add(new Ingridients(idIngredient, ingredientName, ingredientMeasure, ingredientAmount));
+                Ingridients i = new Ingridients(idIngredient, ingredientName, ingredientMeasure, ingredientAmount);
+                ingredients.add(i.getIdIngredient() + " " + i.getIngredientName() +
+                        " " + i.getIngredientAmount() + " " + i.getIngredientMeasure());
             }
         } catch (SQLException e) {
             e.printStackTrace();
