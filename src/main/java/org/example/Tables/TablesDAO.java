@@ -10,6 +10,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TablesDAO {
+    public void updateTableEmploy(int idTable, boolean employBool, String role){
+        if (role.equals("User")) return;
+        int employ = employBool ? 1 : 0;
+        String sql = "UPDATE kp.tables\n" +
+                "SET employ_table = "+employ+"\n" +
+                "WHERE id_table = ?";
+
+        try (Connection conn = DataBaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idTable);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public List<Tables> getAllTables(String role) {
         List<Tables> tables = new ArrayList<>();
@@ -29,22 +45,5 @@ public class TablesDAO {
         }
 
         return tables;
-    }
-
-    public void updateTableEmploy(int idTable, boolean employBool, String role){
-        if (role.equals("User")) return;
-        int employ = employBool ? 1 : 0;
-        String sql = "UPDATE kp.tables\n" +
-                "SET employ_table = "+employ+"\n" +
-                "WHERE id_table = ?";
-
-        try (Connection conn = DataBaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idTable);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

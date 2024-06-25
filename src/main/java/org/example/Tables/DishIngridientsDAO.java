@@ -42,6 +42,18 @@ public class DishIngridientsDAO {
         }
     }
 
+    public void getDishIngredient(int idDish, String role) {
+        String sql = "SELECT * FROM kp.dishes_ingridients WHERE id_dish = ?";
+
+        try (Connection conn = DataBaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idDish);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<DishIngridients> getAllDishIngredients(String role) {
         List<DishIngridients> dishIngredients = new ArrayList<>();
         String sql = "SELECT * FROM kp.dishes_ingredients";

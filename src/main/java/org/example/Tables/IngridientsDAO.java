@@ -11,7 +11,7 @@ import java.util.List;
 
 public class IngridientsDAO {
 
-    public void addIngredient(Ingridients ingridient, double ingridientAddedAmount, String role) {
+    public void addIngredient(int id, double ingridientAddedAmount, String role) {
         if (role.equals("User")) return;
         String sql = "UPDATE kp.ingridients\n" +
                 "SET ingridient_amount = "+ingridientAddedAmount+" + ingridient_amount\n" +
@@ -19,8 +19,7 @@ public class IngridientsDAO {
 
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setDouble(1, ingridient.getIdIngredient());
-            stmt.setDouble(2, ingridient.getIdIngredient());
+            stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
