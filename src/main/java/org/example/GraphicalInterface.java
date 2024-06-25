@@ -26,7 +26,6 @@ public class GraphicalInterface extends Application {
         Stage stage = new Stage();
         MainStage.startStage(stage);
 
-
         //user access and registration step
         primaryStage.setTitle("User Access Application");
         GridPane grid = new GridPane();

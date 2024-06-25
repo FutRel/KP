@@ -11,7 +11,8 @@ import java.util.List;
 
 public class IngridientsDAO {
 
-    public void addIngredient(Ingridients ingridient, double ingridientAddedAmount) {
+    public void addIngredient(Ingridients ingridient, double ingridientAddedAmount, String role) {
+        if (role.equals("User")) return;
         String sql = "UPDATE kp.ingridients\n" +
                 "SET ingridient_amount = "+ingridientAddedAmount+" + ingridient_amount\n" +
                 "WHERE id_ingridient = ?";
@@ -26,7 +27,8 @@ public class IngridientsDAO {
         }
     }
 
-    public void addNewIngredient(Ingridients ingridient) {
+    public void addNewIngredient(Ingridients ingridient, String role) {
+        if (role.equals("User")) return;
         String sql = "INSERT INTO kp.ingridients (name_ingridient, ingridient_measure, ingridient_amount) VALUES (?, ?, ?)";
 
         try (Connection conn = DataBaseConnection.getConnection();
@@ -40,8 +42,10 @@ public class IngridientsDAO {
         }
     }
 
-    public List<Ingridients> getAllIngredients() {
+    public List<Ingridients> getAllIngredients(String role) {
         List<Ingridients> ingredients = new ArrayList<>();
+        if (role.equals("User")) return ingredients;
+
         String sql = "SELECT * FROM kp.ingridients";
 
         try (Connection conn = DataBaseConnection.getConnection();

@@ -10,7 +10,9 @@ import java.util.List;
 
 public class DishesDAO {
 
-    public void addDish(Dishes dish) {
+    public void addDish(Dishes dish, String role) {
+        if (role.equals("User")) return;
+
         String sql = "INSERT INTO kp.dishes (name_dish) VALUES (?)";
 
         try (Connection conn = DataBaseConnection.getConnection();
@@ -22,7 +24,9 @@ public class DishesDAO {
         }
     }
 
-    public void deleteDish(int idDish) {
+    public void deleteDish(int idDish, String role) {
+        if (role.equals("User")) return;
+
         String sql = "DELETE FROM kp.dishes WHERE id_dish = ?";
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -33,7 +37,7 @@ public class DishesDAO {
         }
     }
 
-    public void getDish(int idDish) {
+    public void getDish(int idDish, String role) {
         String sql = "SELECT * FROM dishes WHERE id_dish = ?";
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -44,7 +48,7 @@ public class DishesDAO {
         }
     }
 
-    public List<Dishes> getAllDishes() {
+    public List<Dishes> getAllDishes(String role) {
         List<Dishes> dishes = new ArrayList<>();
         String sql = "SELECT * FROM kp.dishes";
 

@@ -11,7 +11,9 @@ import java.util.List;
 
 public class DishIngridientsDAO {
 
-    public void addDishIngredient(DishIngridients dishIngredient) {
+    public void addDishIngredient(DishIngridients dishIngredient, String role) {
+        if (role.equals("User")) return;
+
         String sql = "INSERT INTO kp.dishes_ingridients (id_dish, id_ingridient, ingridient_amount) VALUES (?, ?, ?)";
 
         try (Connection conn = DataBaseConnection.getConnection();
@@ -25,7 +27,9 @@ public class DishIngridientsDAO {
         }
     }
 
-    public void deleteDishIngredient(int idDish, int idIngredient) {
+    public void deleteDishIngredient(int idDish, int idIngredient, String role) {
+        if (role.equals("User")) return;
+
         String sql = "DELETE FROM kp.dishes_ingridients WHERE id_dish = ? AND id_ingridient = ?";
 
         try (Connection conn = DataBaseConnection.getConnection();
@@ -38,7 +42,7 @@ public class DishIngridientsDAO {
         }
     }
 
-    public List<DishIngridients> getAllDishIngredients() {
+    public List<DishIngridients> getAllDishIngredients(String role) {
         List<DishIngridients> dishIngredients = new ArrayList<>();
         String sql = "SELECT * FROM kp.dishes_ingredients";
 

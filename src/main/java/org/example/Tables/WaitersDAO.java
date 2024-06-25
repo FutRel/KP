@@ -11,22 +11,24 @@ import java.util.List;
 
 public class WaitersDAO {
 
-    public void addWaiter(Waiters waiter) {
-        String sql = "INSERT INTO kp.waiters (id_waiter, name_waiter, addres_waiter, number_waiter) VALUES (?, ?, ?, ?)";
+    public void addWaiter(Waiters waiter, String role) {
+        if (role.equals("User")) return;
+
+        String sql = "INSERT INTO kp.waiters (name_waiter, addres_waiter, number_waiter) VALUES (?, ?, ?)";
 
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, waiter.getIdWaiter());
-            stmt.setString(2, waiter.getNameWaiter());
-            stmt.setString(3, waiter.getAddressWaiter());
-            stmt.setString(4, waiter.getNumberWaiter());
+            stmt.setString(1, waiter.getNameWaiter());
+            stmt.setString(2, waiter.getAddressWaiter());
+            stmt.setString(3, waiter.getNumberWaiter());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void updateWaiterData(int idWaiter, String nameWaiter, String addresWaiter, String numberWaiter){
+    public void updateWaiterData(int idWaiter, String nameWaiter, String addresWaiter, String numberWaiter, String role){
+        if (role.equals("User")) return;
 
         String sql = "UPDATE kp.waiters\n" +
                 "SET name_waiter = "+nameWaiter+"\n" +
@@ -44,7 +46,9 @@ public class WaitersDAO {
         }
     }
 
-    public void deleteWaiter(int idWaiter) {
+    public void deleteWaiter(int idWaiter, String role) {
+        if (role.equals("User")) return;
+
         String sql = "DELETE FROM kp.waiters WHERE id_waiter = ?";
 
         try (Connection conn = DataBaseConnection.getConnection();
@@ -56,8 +60,10 @@ public class WaitersDAO {
         }
     }
 
-    public List<Waiters> getAllWaiters() {
+    public List<Waiters> getAllWaiters(String role) {
         List<Waiters> waiters = new ArrayList<>();
+        if (role.equals("User")) return waiters;
+
         String sql = "SELECT * FROM kp.waiters";
 
         try (Connection conn = DataBaseConnection.getConnection();

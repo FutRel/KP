@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TablesDAO {
 
-    public List<Tables> getAllTables() {
+    public List<Tables> getAllTables(String role) {
         List<Tables> tables = new ArrayList<>();
         String sql = "SELECT * FROM kp.tables";
 
@@ -31,7 +31,8 @@ public class TablesDAO {
         return tables;
     }
 
-    public void updateTableEmploy(int idTable, boolean employBool){
+    public void updateTableEmploy(int idTable, boolean employBool, String role){
+        if (role.equals("User")) return;
         int employ = employBool ? 1 : 0;
         String sql = "UPDATE kp.tables\n" +
                 "SET employ_table = "+employ+"\n" +

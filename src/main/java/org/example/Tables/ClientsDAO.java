@@ -11,7 +11,9 @@ import java.util.List;
 
 public class ClientsDAO {
 
-    public void addClient(Clients client) {
+    public void addClient(Clients client, String role) {
+        if (role.equals("User")) return;
+
         String sql = "INSERT INTO kp.clients (name_client, address_client) VALUES (?, ?)";
 
         try (Connection conn = DataBaseConnection.getConnection();
@@ -24,7 +26,9 @@ public class ClientsDAO {
         }
     }
 
-    public void deleteClient(int idClient) {
+    public void deleteClient(int idClient, String role) {
+        if (role.equals("User")) return;
+
         String sql = "DELETE FROM kp.clients WHERE id_client = ?";
 
         try (Connection conn = DataBaseConnection.getConnection();
@@ -36,9 +40,12 @@ public class ClientsDAO {
         }
     }
 
-    public Clients getClient(int id) {
-        String sql = "SELECT * FROM kp.clients WHERE id_client = ?";
+    public Clients getClient(int id, String role) {
         Clients ret = new Clients(0, "", "");
+
+        if (role.equals("User")) return ret;
+
+        String sql = "SELECT * FROM kp.clients WHERE id_client = ?";
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -56,8 +63,10 @@ public class ClientsDAO {
         return ret;
     }
 
-    public List<Clients> getAllClients() {
+    public List<Clients> getAllClients(String role) {
         List<Clients> clients = new ArrayList<>();
+        if (role.equals("User")) return clients;
+
         String sql = "SELECT * FROM kp.clients";
 
         try (Connection conn = DataBaseConnection.getConnection();
