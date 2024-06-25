@@ -16,9 +16,6 @@ public class GraphicalInterface extends Application {
     private final UserAccessManager accessManager = new UserAccessManager();
 
     static String role = "";
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/kp";
-    private static final String USER = "root";
-    private static final String PASS = "SQL1234";
 
     public static void main(String[] args){
         launch(args);
@@ -122,7 +119,8 @@ public class GraphicalInterface extends Application {
     }
 
     private static void insertData(String sql) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+        try {
+            Connection conn = DataBaseConnection.getConnection();
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
         } catch (SQLException e) {

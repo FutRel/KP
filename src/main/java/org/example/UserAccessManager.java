@@ -4,17 +4,14 @@ import java.sql.*;
 import java.util.*;
 
 public class UserAccessManager {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/kp";
-    private static final String USER = "root";
-    private static final String PASS = "SQL1234";
 
     private static Map<String, String> users = new HashMap<>();
     private static Map<String, Integer> users_access = new HashMap<>();
 
     public UserAccessManager() {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            if (conn != null) System.out.println("Соединение с базой данных установлено.");
-
+        try {
+            Connection conn = DataBaseConnection.getConnection();
+            System.out.println("Соединение с базой данных установлено.");
             Statement statement = conn.createStatement();
             String query = "SELECT * FROM KP.users";
             ResultSet result = statement.executeQuery(query);
@@ -43,7 +40,8 @@ public class UserAccessManager {
     }
 
     public static void updateDB(){
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+        try {
+            Connection conn = DataBaseConnection.getConnection();
             Statement statement = conn.createStatement();
             String query = "SELECT * FROM KP.users";
             ResultSet result = statement.executeQuery(query);
