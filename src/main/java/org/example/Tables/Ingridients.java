@@ -28,8 +28,4 @@ public class Ingridients {
     public double getIngredientAmount() {
         return ingredientAmount;
     }
-
-    public void setIngredientAmount(double ingredientAmount) {
-        this.ingredientAmount = ingredientAmount;
-    }
 }

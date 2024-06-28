@@ -10,8 +10,8 @@ import java.util.List;
 
 public class DishesDAO {
 
-    public void addDish(Dishes dish, String role) {
-        if (role.equals("User")) return;
+    public String addDish(Dishes dish, String role) {
+        if (role.equals("User")) return "Not allowed";
 
         String sql = "INSERT INTO kp.dishes (name_dish) VALUES (?)";
 
@@ -19,29 +19,33 @@ public class DishesDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, dish.getNameDish());
             stmt.executeUpdate();
+            return "Done";
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "Error";
     }
 
-    public void deleteDish(int idDish, String role) {
-        if (role.equals("User")) return;
+    public String deleteDish(Dishes dish, String role) {
+        if (role.equals("User")) return "Not allowed";
 
         String sql = "DELETE FROM kp.dishes WHERE id_dish = ?";
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idDish);
+            stmt.setInt(1, dish.getIdDish());
             stmt.executeUpdate();
+            return "Done";
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "Error";
     }
 
-    public String getDish(int idDish, String role) {
+    public String getDish(Dishes dish, String role) {
         String sql = "SELECT * FROM dishes WHERE id_dish = ?";
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idDish);
+            stmt.setInt(1, dish.getIdDish());
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     int id = rs.getInt("id_dish");

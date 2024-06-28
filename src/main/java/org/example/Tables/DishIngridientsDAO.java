@@ -1,7 +1,6 @@
 package org.example.Tables;
 
 import org.example.DataBaseConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,8 +10,8 @@ import java.util.List;
 
 public class DishIngridientsDAO {
 
-    public void addDishIngredient(DishIngridients dishIngredient, String role) {
-        if (role.equals("User")) return;
+    public String addDishIngredient(DishIngridients dishIngredient, String role) {
+        if (role.equals("User")) return "Not allowed";
 
         String sql = "INSERT INTO kp.dishes_ingridients (id_dish, id_ingridient, ingridient_amount) VALUES (?, ?, ?)";
 
@@ -22,13 +21,15 @@ public class DishIngridientsDAO {
             stmt.setInt(2, dishIngredient.getIdIngredient());
             stmt.setInt(3, dishIngredient.getIngredientAmount());
             stmt.executeUpdate();
+            return "Done";
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "Error";
     }
 
-    public void deleteDishIngredient(int idDish, int idIngredient, String role) {
-        if (role.equals("User")) return;
+    public String deleteDishIngredient(int idDish, int idIngredient, String role) {
+        if (role.equals("User")) return "Not allowed";
 
         String sql = "DELETE FROM kp.dishes_ingridients WHERE id_dish = ? AND id_ingridient = ?";
 
@@ -37,9 +38,11 @@ public class DishIngridientsDAO {
             stmt.setInt(1, idDish);
             stmt.setInt(2, idIngredient);
             stmt.executeUpdate();
+            return "Done";
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "Error";
     }
 
     public List<String> getDishIngredient(int idDish, String role) {

@@ -23,11 +23,4 @@ public class Clients {
         return addressClient;
     }
 
-    public void setNameClient(String nameClient) {
-        this.nameClient = nameClient;
-    }
-
-    public void setAddressClient(String addressClient) {
-        this.addressClient = addressClient;
-    }
 }

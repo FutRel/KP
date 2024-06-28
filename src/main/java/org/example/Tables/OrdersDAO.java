@@ -12,10 +12,11 @@ import java.util.List;
 
 public class OrdersDAO {
 
-    public void addOrder(Orders order, String role) {
-        if (role.equals("User")) return;
+    public String addOrder(Orders order, String role) {
+        if (role.equals("User")) return "Not allowed";
 
-        String sql = "INSERT INTO kp.orders (date_order, time_start_order, time_end_order, waiter_order, table_order, client_order) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO kp.orders (date_order, time_start_order," +
+                " time_end_order, waiter_order, table_order, client_order) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -26,13 +27,16 @@ public class OrdersDAO {
             stmt.setInt(5, order.getTableOrder());
             stmt.setInt(6, order.getClientOrder());
             stmt.executeUpdate();
+            return "Done";
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "Error";
     }
 
     public List<String> getAllOrders(String role) {
         List<String> orders = new ArrayList<>();
+        orders.add("Not allowed");
         if (!role.equals("Admin")) return orders;
 
         String sql = "SELECT * FROM kp.orders";
@@ -40,6 +44,7 @@ public class OrdersDAO {
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
+            orders.clear();
             while (rs.next()) {
                 int idOrder = rs.getInt("id_order");
                 Date dateOrder = rs.getDate("date_order");

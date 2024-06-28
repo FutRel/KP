@@ -1,7 +1,6 @@
 package org.example.Tables;
 
 import org.example.DataBaseConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,24 +10,26 @@ import java.util.List;
 
 public class UsersDAO {
 
-    public void deleteUser(int idUser, String role) {
-        if (role.equals("User")) return;
+    public String deleteUser(Users user, String role) {
+        if (role.equals("User")) return "Not allowed";
         String sql = "DELETE FROM kp.users WHERE user_id = ?";
 
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idUser);
+            stmt.setInt(1, user.getIdUser());
             stmt.executeUpdate();
+            return "Done";
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "Error";
     }
 
-    public void updateUserRole(int idUser, int updatedRole, String role){
-        if (role.trim().equals("User")) return;
+    public String updateUserRole(Users user, int updatedRole, String role){
+        if (role.trim().equals("User")) return "Not allowed";
         if (updatedRole < 1 || updatedRole > 3){
             System.out.println("Ошибка!");
-            return;
+            return "Role error";
         }
         String sql = "UPDATE kp.users\n" +
                 "SET role_user = "+updatedRole+"\n" +
@@ -36,16 +37,18 @@ public class UsersDAO {
 
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idUser);
+            stmt.setInt(1, user.getIdUser());
             stmt.executeUpdate();
+            return "Done";
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "Error";
     }
 
-    public void updateUserData(int idUser, String username, String passwordUser, String fullNameUser, String role){
-        if (role.equals("User")) return;
+    public String updateUserData(Users user, String username, String passwordUser, String fullNameUser, String role){
+        if (role.equals("User")) return "Not allowed";
 
         String sql = "UPDATE kp.users\n" +
                 "SET username = "+username+"\n" +
@@ -55,23 +58,25 @@ public class UsersDAO {
 
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idUser);
+            stmt.setInt(1, user.getIdUser());
             stmt.executeUpdate();
+            return "Done";
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "Error";
     }
 
-    public String getUser(int idUser, String role){
-        if (role.equals("User")) return "";
+    public String getUser(Users user, String role){
+        if (role.equals("User")) return "Not allowed";
 
         String sql = "SELECT * FROM kp.users WHERE user_id = ?";
         String result = "";
 
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idUser);
+            stmt.setInt(1, user.getIdUser());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -82,29 +87,32 @@ public class UsersDAO {
                     int roleUser = rs.getInt("role_user");
                     result = id + " " + username + " " + passwordUser + " " + fullNameUser + " " + roleUser;
                 }
+                return result;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return result;
+        return "Error";
     }
 
     public List<String> getAllUsers(String role) {
         List<String> users = new ArrayList<>();
+        users.add("Not allowed");
 
         if (!role.equals("Admin")) return users;
 
         String sql = "SELECT * FROM kp.users";
         int idUser;
-        String username = "";
-        String passwordUser = "";
-        String fullNameUser = "";
+        String username;
+        String passwordUser;
+        String fullNameUser;
         int roleUser;
 
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
+            users.clear();
             while (rs.next()) {
                 idUser = rs.getInt("id_user");
                 username = rs.getString("username");
@@ -119,7 +127,7 @@ public class UsersDAO {
         return users;
     }
 
-    public void updateSelfData(String username_now, String password_now, String newUsername, String newPassword, String fullNameUser) {
+    public String updateSelfData(Users me, String newUsername, String newPassword, String fullNameUser) {
 
         String sql = "UPDATE kp.users " +
                 "SET username = ?, " +
@@ -133,13 +141,15 @@ public class UsersDAO {
             stmt.setString(1, newUsername);
             stmt.setString(2, newPassword);
             stmt.setString(3, fullNameUser);
-            stmt.setString(4, username_now);
-            stmt.setString(5, password_now);
+            stmt.setString(4, me.getUsername());
+            stmt.setString(5, me.getPasswordUser());
 
             stmt.executeUpdate();
+            return "Done";
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "Error";
     }
 }

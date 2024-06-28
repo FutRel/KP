@@ -17,7 +17,4 @@ public class Dishes {
         return nameDish;
     }
 
-    public void setNameDish(String nameDish) {
-        this.nameDish = nameDish;
-    }
 }

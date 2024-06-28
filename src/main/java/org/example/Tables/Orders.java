@@ -22,7 +22,6 @@ public class Orders {
         this.clientOrder = clientOrder;
     }
 
-    // Getters and Setters
     public int getIdOrder() {
         return idOrder;
     }

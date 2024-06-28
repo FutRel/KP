@@ -19,11 +19,4 @@ public class Tables {
         return capacityTable;
     }
 
-    public int isEmployTable() {
-        return employTable;
-    }
-
-    public void setEmployTable(int employTable) {
-        this.employTable = employTable;
-    }
 }
