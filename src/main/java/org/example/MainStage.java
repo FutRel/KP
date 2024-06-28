@@ -6,8 +6,6 @@ import javafx.stage.Stage;
 import org.example.Tables.*;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import java.util.*;
 
 public class MainStage {
 
