@@ -75,7 +75,7 @@ public class ClientsView extends Application {
         Button getAllButton = new Button("Get All Clients");
         getAllButton.setOnAction(e -> {
             List<String> clients = clientsDAO.getAllClients(my_role);
-            clients.forEach(System.out::println);
+            clients.forEach(c -> outputTextArea.appendText(c + "\n"));
         });
 
         grid.add(addButton, 0, 0);
